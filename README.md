@@ -1,5 +1,6 @@
 # jquery.confirm.js
-Simple confirmation box
+
+This little script adds a modal to body. You need to style (Hide, Transform, Translate, ..) it.
  
 ## Example
 
@@ -16,6 +17,18 @@ $('.removeButton').confirm({
 ```
 
 ## Options
+
+- template: null,
+- title: 'Are you sure?',
+- content: 'Please press OK to confirm and run, or Abort to abort this action.',
+- button_accept: 'OK',
+- button_abort: 'Abort',
+- on: 'click',
+- button_pressed: function(){},
+- close: function(){},
+- defaultAction: function(){},
+- accept: function(){},
+- abort: function(){},
 
 <table width="100%">
 	<thead>
