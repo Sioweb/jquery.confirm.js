@@ -1,3 +1,40 @@
 # jquery.confirm.js
 Simple confirmation box
  
+## Example
+
+```
+$('.removeButton').confirm({
+ on: 'click',
+ accept: function(obj) {
+  alert('Aktion akzeptiert!');
+ },
+ abort: function() {
+  alert('Aktion abgebrochen!');
+ }
+});
+```
+
+## Options
+
+<table width="100%">
+	<tr>
+		<th>Option</th><th>Werte</th><th>Beschreibung</th>
+	</tr>
+	<tr>
+		<td>on: 'click'</td>
+		<td>(string)Event-Name</td>
+		<td>'click','hover', ...</td>
+	</tr>
+	<tr>
+		<td>title: ''</td>
+		<td>Modal-Headline</td>
+		<td>Wird als H2-Element im Modal ausgegeben.</td>
+	</tr>
+	<tr>
+		<td>content: ''</td>
+		<td>Modal-Inhalt</td>
+		<td>Wird als Frage unter der Headline ausgegeben.</td>
+	</tr>
+</table>
+
