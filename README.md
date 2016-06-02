@@ -17,7 +17,7 @@ $('.removeButton').confirm({
 
 ## Options
 
-<table width="100%">
+<table style="display:table;" width="100%">
 	<tr>
 		<th>Option</th><th>Werte</th><th>Beschreibung</th>
 	</tr>
@@ -37,4 +37,3 @@ $('.removeButton').confirm({
 		<td>Wird als Frage unter der Headline ausgegeben.</td>
 	</tr>
 </table>
-
