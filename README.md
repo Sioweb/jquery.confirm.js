@@ -39,5 +39,10 @@ $('.removeButton').confirm({
 			<td>Modal-Inhalt</td>
 			<td>Wird als Frage unter der Headline ausgegeben.</td>
 		</tr>
+		<tr>
+			<td>accept: function(){}</td>
+			<td>Accept-Event</td>
+			<td>Wird ausgeführt wenn der User auf den OK-Button klickt.</td>
+		</tr>
 	</tbody>
 </table>
