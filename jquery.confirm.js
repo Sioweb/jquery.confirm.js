@@ -15,10 +15,11 @@
         button_accept: 'OK',
         button_abort: 'Abbrechen',
         on: 'click',
+        button_pressed: function(){},
         close: function(){},
         defaultAction: function(){},
         accept: function(){},
-        unaccept: function(){},
+        abort: function(){},
 	    },
 
   PluginClass = function() {
@@ -45,19 +46,29 @@
       selfObj.createTemplate();
 
       selfObj.modal = $(selfObj.template).appendTo('body');
-      selfObj.modal.find('ui-modal-button').click(function(){
+
+      selfObj.modal.click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+      });
+      selfObj.modal.find('.ui-modal-button').click(function(e){
         var $el = $(this);
 
+        selfObj.button_pressed($el,selfObj);
+
         if($el.is('.ui-modal-ok')) {
+          selfObj.modal.removeClass('open');
           selfObj.accept(selfObj);
         }
         if($el.is('.ui-modal-abort')) {
           selfObj.modal.removeClass('open');
+          selfObj.abort(selfObj);
         }
       });
       selfObj.modal.find('.ui-modal-close').click(function(){
+        selfObj.button_pressed($(this),selfObj);
         selfObj.modal.removeClass('open');
-        selfObj.close($(this),selfObj);
+        selfObj.abort(selfObj);
       });
       
       this.loaded();
@@ -65,9 +76,9 @@
 
     this.createTemplate = function() {
       if(!selfObj.template) {
-        selfObj.template = '<div class="ui-modal modal">';
+        selfObj.template = '<div class="ui-modal">';
           selfObj.template += '<div class="ui-modal-close"></div>';
-          selfObj.template += '<div class="ui-modal-inner inner">';
+          selfObj.template += '<div class="ui-modal-inner">';
             selfObj.template += '<h2>'+selfObj.title+'</h2>';
             selfObj.template += '<p>'+selfObj.content+'</p>';
             selfObj.template += '<div class="ui-modal-buttons">'
