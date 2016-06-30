@@ -16,6 +16,20 @@ $('.removeButton').confirm({
 });
 ```
 
+## Custom buttons
+
+$('.removeButton').confirm({
+  custom_buttons: {
+    do_something_cool: {
+      title: 'Click here',
+      link: 'link/to/path',
+      target: '_blank',
+      keep_modal: 1,
+      callback: function(element, buttonSettings, confirmObject) {}
+    }
+  }
+});
+
 ## Options
 
 - template: null,
