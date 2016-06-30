@@ -18,6 +18,7 @@ $('.removeButton').confirm({
 
 ## Custom buttons
 
+```
 $('.removeButton').confirm({
   custom_buttons: {
     do_something_cool: {
@@ -29,6 +30,7 @@ $('.removeButton').confirm({
     }
   }
 });
+```
 
 ## Options
 
@@ -37,6 +39,7 @@ $('.removeButton').confirm({
 - content: 'Please press OK to confirm and run, or Abort to abort this action.',
 - button_accept: 'OK',
 - button_abort: 'Abort',
+- custom_buttons: {},
 - on: 'click',
 - button_pressed: function(){},
 - close: function(){},
