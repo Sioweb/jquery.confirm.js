@@ -61,7 +61,20 @@
         e.stopPropagation();
       });
       selfObj.modal.find('a').unbind('click').click(function(e){
+        var $el = $(this),
+            customData = $el.data('custom');
         e.stopPropagation();
+
+        if(
+          selfObj.custom_buttons !== undefined && 
+          customData !== undefined && 
+          selfObj.custom_buttons[customData] !== undefined
+        ) {
+          if(typeof selfObj.custom_buttons[customData].callback === 'function')
+            selfObj.custom_buttons[customData].callback($el,selfObj.custom_buttons[customData],selfObj);
+          if(selfObj.custom_buttons[customData].keep_modal === undefined)
+            selfObj.modal.removeClass('open');
+        }
       });
       selfObj.modal.find('.ui-modal-button').click(function(e){
         var $el = $(this);
@@ -99,7 +112,7 @@
               if(selfObj.custom_buttons)
                 for(var button in selfObj.custom_buttons) {
                   selfObj.template += '<div class="ui-modal-button-custom ui-modal-custom-'+button+'">';
-                    if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '<a href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
+                    if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '<a data-custom="'+button+'" href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
                     selfObj.template += selfObj.custom_buttons[button].title;
                     if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '</a>';
                   selfObj.template += '</div>'
