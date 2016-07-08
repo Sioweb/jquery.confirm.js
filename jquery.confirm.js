@@ -144,7 +144,6 @@
 
 		this.inner_open = function() {
 			$('body').on('confirm.keyup',function(e,keyupEvent) {
-				console.log(parseInt(keyupEvent.which,10));
 				switch(parseInt(keyupEvent.which,10)) {
 					case selfObj.keys.ok:
 						selfObj.inner_accept();
