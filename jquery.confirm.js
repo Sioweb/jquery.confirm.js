@@ -5,22 +5,23 @@
   var pluginName = 'confirm',
       /* Enter PluginOptions */
       standardOptions = {
-	      debug: true,
-	      enabled: true,
-	      container: window,
+        debug: true,
+        enabled: true,
+        container: window,
         template: null,
         title: 'Sind Sie sicher?',
         content: 'Bitte bestätigen Sie ihre Aktion mit OK, oder brechen Sie die Aktion ab mit Abbrechen.',
         button_accept: 'OK',
         button_abort: 'Abbrechen',
         on: 'click',
+        input: false,
         custom_buttons: null,
         button_pressed: function(){},
         close: function(){},
         defaultAction: function(){},
         accept: function(){},
         abort: function(){},
-	    },
+      },
 
   PluginClass = function() {
 
@@ -31,7 +32,7 @@
     this.isHTML = false;
 
     this.initOptions = new Object(standardOptions);
-    
+
     this.init = function(elem) {
       var reload = arguments[1]||false;
       selfObj = this;
@@ -44,7 +45,7 @@
       if(!this.container)
         this.container = window;
       this.container = $(this.container);
-      
+
       this.elem = elem;
       this.item = $(this.elem);
       this.isHTML = selfObj.item[0].tagName.toLowerCase() === 'html';
@@ -53,21 +54,20 @@
         return;
 
       selfObj.createTemplate();
-
       selfObj.modal = $(selfObj.template).appendTo('body');
-
       selfObj.modal.unbind('click').click(function(e){
         e.preventDefault();
         e.stopPropagation();
       });
+
       selfObj.modal.find('a').unbind('click').click(function(e){
         var $el = $(this),
             customData = $el.data('custom');
         e.stopPropagation();
 
         if(
-          selfObj.custom_buttons !== undefined && 
-          customData !== undefined && 
+          selfObj.custom_buttons !== undefined &&
+          customData !== undefined &&
           selfObj.custom_buttons[customData] !== undefined
         ) {
           if(typeof selfObj.custom_buttons[customData].callback === 'function')
@@ -76,26 +76,29 @@
             selfObj.modal.removeClass('open');
         }
       });
+
       selfObj.modal.find('.ui-modal-button').click(function(e){
         var $el = $(this);
 
         selfObj.button_pressed($el,selfObj);
 
         if($el.is('.ui-modal-ok')) {
-          selfObj.modal.removeClass('open');
           selfObj.accept(selfObj);
-        }
-        if($el.is('.ui-modal-abort')) {
           selfObj.modal.removeClass('open');
+        }
+
+        if($el.is('.ui-modal-abort')) {
           selfObj.abort(selfObj);
+          selfObj.modal.removeClass('open');
         }
       });
+
       selfObj.modal.find('.ui-modal-close').click(function(){
         selfObj.button_pressed($(this),selfObj);
         selfObj.modal.removeClass('open');
         selfObj.abort(selfObj);
       });
-      
+
       this.loaded();
     };
 
@@ -106,6 +109,10 @@
           selfObj.template += '<div class="ui-modal-inner inner">';
             selfObj.template += '<h2>'+selfObj.title+'</h2>';
             selfObj.template += '<p>'+selfObj.content+'</p>';
+            if(selfObj.input) {
+              selfObj.template += '<input type="text" name="confirm_input">';
+            }
+
             selfObj.template += '<div class="ui-modal-buttons">'
               if(selfObj.button_accept) selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>'
               if(selfObj.button_abort) selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>'
@@ -155,7 +162,7 @@
     var element = typeof this === 'function'?$('html'):this,
         newData = arguments[1]||{},
         returnElement = [];
-        
+
     returnElement[0] = element.each(function(k,i) {
       var pluginClass = $.data(this, pluginName);
 
@@ -171,6 +178,7 @@
           if(settings)
             newOptions = $.extend(true,{},newOptions,settings);
           pluginClass = $.extend(newOptions,pluginClass);
+
           /** Initialisieren. */
           pluginClass.init(this);
           $.data(this, pluginName, pluginClass);
@@ -190,7 +198,5 @@
 
     if(returnElement[1] !== undefined) return returnElement[1];
     return returnElement[0];
-
   };
-  
 })(jQuery);
