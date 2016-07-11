@@ -7,6 +7,7 @@
 			standardOptions = {
 				debug: true,
 				enabled: true,
+				reload: false,
 				container: window,
 				template: null,
 				title: 'Sind Sie sicher?',
@@ -41,7 +42,7 @@
 			var reload = arguments[1]||false;
 			selfObj = this;
 
-			if(reload) {
+			if(reload || (selfObj.reload && selfObj.modal !== null)) {
 				selfObj.modal.remove();
 				selfObj.template = null;
 			}
@@ -209,10 +210,12 @@
 
 					/** Initialisieren. */
 					pluginClass.init(this);
-					$.data(this, pluginName, pluginClass);
+					if(element.prop('tagName').toLowerCase() !== 'html')
+						$.data(this, pluginName, pluginClass);
 				} else {
 					pluginClass.init(this,1);
-					$.data(this, pluginName, pluginClass);
+					if(element.prop('tagName').toLowerCase() !== 'html')
+						$.data(this, pluginName, pluginClass);
 				}
 			} else if(!pluginClass) {
 				return;
