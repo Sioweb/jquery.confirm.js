@@ -1,4 +1,3 @@
-
 .ui-modal {
 	top: -100%;
 	left: 50%;
@@ -31,7 +30,7 @@
 }
 
 .ui-modal-buttons {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 .ui-modal-buttons > * {
@@ -47,5 +46,5 @@
 
 .ui-modal input[name="confirm_input"] {
 	margin-top: 3rem;
-  border: 1px solid #333;
+	border: 1px solid #333;
 }
