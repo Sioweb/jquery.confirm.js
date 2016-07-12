@@ -1,0 +1,51 @@
+
+.ui-modal {
+	top: -100%;
+	left: 50%;
+	opacity: 0;
+	color: #333;
+	padding: 20px;
+	z-index: 999999;
+	background: #fff;
+	position: absolute;
+	border-radius: 3px;
+	border: 1px solid #eee;
+
+	-webkit-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	-o-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+
+	-webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
+	-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
+	box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
+
+	-webkit-transition: opacity .3s, top .3s;
+	-o-transition: opacity .3s, top .3s;
+	transition: opacity .3s, top .3s;
+}
+
+.ui-modal.open {
+	top: 50%;
+	opacity: 1;
+}
+
+.ui-modal-buttons {
+  margin-top: 20px;
+}
+
+.ui-modal-buttons > * {
+	color: #eee;
+	cursor: pointer;
+	background: #333;
+	padding: 5px 20px;
+	margin-right: 20px;
+	border-radius: 4px;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.ui-modal input[name="confirm_input"] {
+	margin-top: 3rem;
+  border: 1px solid #333;
+}
