@@ -1,50 +1,101 @@
+/* @group Confirm */
+
 .ui-modal {
-	top: -100%;
-	left: 50%;
-	opacity: 0;
-	color: #333;
-	padding: 20px;
-	z-index: 999999;
-	background: #fff;
-	position: absolute;
-	border-radius: 3px;
-	border: 1px solid #eee;
+  top: -100%;
+  left: 50%;
+  opacity: 0;
+  color: #333;
+  padding: 20px;
+  z-index: 999999;
+  background: #fff;
+  position: absolute;
+  border-radius: 3px;
+  border: 1px solid #eee;
+  font-family: arial, helvetica;
 
-	-webkit-transform: translate(-50%,-50%);
-	-ms-transform: translate(-50%,-50%);
-	-o-transform: translate(-50%,-50%);
-	transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  -o-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
 
-	-webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
-	-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
-	box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.62);
 
-	-webkit-transition: opacity .3s, top .3s;
-	-o-transition: opacity .3s, top .3s;
-	transition: opacity .3s, top .3s;
+  -webkit-transition: opacity .3s, top .3s;
+  -o-transition: opacity .3s, top .3s;
+  transition: opacity .3s, top .3s;
+}
+
+.ui-modal .ui-modal-close {
+  top: 2.4rem;
+  width: 2rem;
+  right: 2rem;
+  height: 2rem;
+  position: absolute;
+}
+.ui-modal .ui-modal-close:before {
+  color: #333;
+  content: "X";
+  cursor: pointer;
+}
+.ui-modal h2 {
+  margin-bottom: 1rem;
+}
+
+ .ui-modal.sw_drag_over {
+  background-color: #eee;
+  .ui-modal-abort {
+    opacity: 0;
+  }
+}
+
+.ui-modal-abort {
+  opacity: 1;
+
+  -webkit-transition: opacity .2s;
+  -moz-transition: opacity .2s;
+  -ms-transition: opacity .2s;
+  -o-transition: opacity .2s;
+  transition: opacity .2s;
 }
 
 .ui-modal.open {
-	top: 50%;
-	opacity: 1;
+  top: 50%;
+  opacity: 1;
 }
 
 .ui-modal-buttons {
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 .ui-modal-buttons > * {
-	color: #eee;
-	cursor: pointer;
-	background: #333;
-	padding: 5px 20px;
-	margin-right: 20px;
-	border-radius: 4px;
-	vertical-align: top;
-	display: inline-block;
+  color: #eee;
+  cursor: pointer;
+  background: #333;
+  padding: 5px 20px;
+  margin-right: 20px;
+  border-radius: 4px;
+  vertical-align: top;
+  display: inline-block;
 }
 
-.ui-modal input[name="confirm_input"] {
-	margin-top: 3rem;
-	border: 1px solid #333;
+.ui-modal .ui-input {
+  margin-top: 3rem;
 }
+.ui-modal .ui-input + .ui-input{
+  margin-top: 2rem;
+}
+.ui-modal .ui-input label {
+  line-height: 1.6;
+  margin-bottom: .5rem;
+}
+
+.ui-modal .ui-input  input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 1rem;
+  border-radius: 2px;
+  border: 1px solid #333;
+}
+/* @end Confirm */
