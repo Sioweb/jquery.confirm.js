@@ -2,8 +2,8 @@
 
 This little script adds a modal to body. You need to style (Hide, Transform, Translate, ..) it.
 
-[] Test
-[] Zwei
+- [] Test
+- [] Zwei
  
 ## Example
 
