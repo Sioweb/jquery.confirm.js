@@ -115,16 +115,16 @@
 							selfObj.template += '<input type="text" name="confirm_input">';
 						}
 
-						selfObj.template += '<div class="ui-modal-buttons">'
-							if(selfObj.button_accept) selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>'
-							if(selfObj.button_abort) selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>'
+						selfObj.template += '<div class="ui-modal-buttons">';
+							if(selfObj.button_accept) selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>';
+							if(selfObj.button_abort) selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>';
 							if(selfObj.custom_buttons)
 								for(var button in selfObj.custom_buttons) {
 									selfObj.template += '<div class="ui-modal-button-custom ui-modal-custom-'+button+'">';
 										if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '<a data-custom="'+button+'" href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
 										selfObj.template += selfObj.custom_buttons[button].title;
 										if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '</a>';
-									selfObj.template += '</div>'
+									selfObj.template += '</div>';
 								}
 						selfObj.template += '</div>';
 					selfObj.template += '</div>';
@@ -141,7 +141,7 @@
 			$('body').unbind('confirm.keyup');
 			selfObj.abort(selfObj);
 			selfObj.modal.removeClass('open');
-		}
+		};
 
 		this.inner_open = function() {
 			$('body').on('confirm.keyup',function(e,keyupEvent) {
@@ -157,7 +157,7 @@
 				$(this).trigger('confirm.keyup',e);
 			});
 			selfObj.modal.addClass('open');
-		}
+		};
 
 		this.disable = function() {
 			clearTimeout(selfObj.scrollTimeOut);
