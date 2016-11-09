@@ -20,12 +20,18 @@
 					ok: 13,
 					abort: 27
 				},
+
+				modalClass: 'modal',
+
+				keep_modal: false,
 				custom_buttons: null,
+				open: function(){},
 				button_pressed: function(){},
 				close: function(){},
 				defaultAction: function(){},
 				accept: function(){},
 				abort: function(){},
+				createForm: false
 			},
 
 	PluginClass = function() {
@@ -62,6 +68,8 @@
 			selfObj.modal = $(selfObj.template).appendTo('body');
 			selfObj.modal.unbind('click').click(function(e){
 				e.preventDefault();
+				e.stopPropagation();
+			}).children().unbind('click').click(function(e){
 				e.stopPropagation();
 			});
 
@@ -105,27 +113,37 @@
 		};
 
 		this.createTemplate = function() {
+			var extraContent = '';
 			if(!selfObj.template) {
-				selfObj.template = '<div class="ui-modal modal" tabindex="1">';
+				selfObj.template = '<div class="ui-modal '+selfObj.modalClass+'" tabindex="1">';
 					selfObj.template += '<div tabindex="3" class="ui-modal-close"></div>';
 					selfObj.template += '<div class="ui-modal-inner inner">';
-						selfObj.template += '<h2>'+selfObj.title+'</h2>';
-						selfObj.template += '<p>'+selfObj.content+'</p>';
-						if(selfObj.input) {
-							selfObj.template += '<input type="text" name="confirm_input">';
-						}
+						selfObj.template += '<div class="ui-modal-header">';
+							selfObj.template += '<h2>'+selfObj.title+'</h2>';
+							selfObj.template += '<p>'+selfObj.content+'</p>';
+						selfObj.template += '</div>';
+							if(selfObj.input && typeof selfObj.createForm === 'function') {
+								extraContent += selfObj.createForm(selfObj);
+							} else if(selfObj.input)
+								extraContent += '<input type="text" name="confirm_input">';
 
-						selfObj.template += '<div class="ui-modal-buttons">';
-							if(selfObj.button_accept) selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>';
-							if(selfObj.button_abort) selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>';
-							if(selfObj.custom_buttons)
-								for(var button in selfObj.custom_buttons) {
-									selfObj.template += '<div class="ui-modal-button-custom ui-modal-custom-'+button+'">';
-										if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '<a data-custom="'+button+'" href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
-										selfObj.template += selfObj.custom_buttons[button].title;
-										if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '</a>';
-									selfObj.template += '</div>';
-								}
+							if(extraContent) {
+								selfObj.template += '<div class="ui-modal-content">';
+									selfObj.template += extraContent;
+								selfObj.template += '</div>';
+							}
+
+							selfObj.template += '<div class="ui-modal-buttons">'
+								if(selfObj.button_accept) selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>'
+								if(selfObj.button_abort) selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>'
+								if(selfObj.custom_buttons)
+									for(var button in selfObj.custom_buttons) {
+										selfObj.template += '<div class="ui-modal-button-custom ui-modal-custom-'+button+'">';
+											if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '<a data-custom="'+button+'" href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
+											selfObj.template += selfObj.custom_buttons[button].title;
+											if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '</a>';
+										selfObj.template += '</div>'
+									}
 						selfObj.template += '</div>';
 					selfObj.template += '</div>';
 				selfObj.template += '</div>';
@@ -134,14 +152,26 @@
 
 		this.inner_accept = function() {
 			selfObj.accept(selfObj);
-			selfObj.modal.removeClass('open');
+			if(!selfObj.keep_modal) {
+				selfObj.modal.removeClass('open');
+				if(selfObj.item.prop('tagName').toLowerCase() === 'html') {
+					setTimeout(function() {
+						selfObj.modal.remove();
+					},500);
+				}
+			}
 		};
 
 		this.inner_abort = function() {
 			$('body').unbind('confirm.keyup');
 			selfObj.abort(selfObj);
 			selfObj.modal.removeClass('open');
-		};
+			if(selfObj.item.prop('tagName').toLowerCase() === 'html') {
+				setTimeout(function() {
+					selfObj.modal.remove();
+				},500);
+			}
+		}
 
 		this.inner_open = function() {
 			$('body').on('confirm.keyup',function(e,keyupEvent) {
@@ -156,8 +186,9 @@
 			}).keyup(function(e){
 				$(this).trigger('confirm.keyup',e);
 			});
+			selfObj.open(selfObj);
 			selfObj.modal.addClass('open');
-		};
+		}
 
 		this.disable = function() {
 			clearTimeout(selfObj.scrollTimeOut);
