@@ -2,39 +2,46 @@
 
 	"use strict";
 
-	var pluginName = 'confirm',
-			/* Enter PluginOptions */
-			standardOptions = {
-				debug: true,
-				enabled: true,
-				reload: false,
-				container: window,
-				template: null,
-				title: 'Sind Sie sicher?',
-				content: 'Bitte bestätigen Sie ihre Aktion mit OK, oder brechen Sie die Aktion ab mit Abbrechen.',
-				button_accept: 'OK',
-				button_abort: 'Abbrechen',
-				on: 'click',
-				input: false,
-				keys: {
-					ok: 13,
-					abort: 27
-				},
+	var pluginName = 'confirm';
 
-				modalClass: 'modal',
+	/* Enter PluginOptions */
+	$[pluginName+'Default'] = {
+		debug: true,
+		enabled: true,
+		reload: false,
+		container: window,
+		template: null,
+		title: 'Sind Sie sicher?',
+		content: 'Bitte bestätigen Sie ihre Aktion mit OK, oder brechen Sie die Aktion ab mit Abbrechen.',
+		button_accept: 'OK',
+		button_abort: 'Abbrechen',
+		on: 'click',
+		input: false,
+		keys: {
+			// ok: 13,
+			abort: 27
+		},
+    url: null,
+    ajaxOptions: {
+    	method: 'POST'
+    },
+    lazyLoad: false,
+    removeOnClose: false,
 
-				keep_modal: false,
-				custom_buttons: null,
-				open: function(){},
-				button_pressed: function(){},
-				close: function(){},
-				defaultAction: function(){},
-				accept: function(){},
-				abort: function(){},
-				createForm: false
-			},
+		modalClass: 'modal',
 
-	PluginClass = function() {
+		keep_modal: false,
+		custom_buttons: null,
+		open: function(){},
+		button_pressed: function(){},
+		close: function(){},
+		defaultAction: function(){},
+		accept: function(){},
+		abort: function(){},
+		createForm: false
+	};
+
+	var PluginClass = function() {
 
 		var selfObj = this,
 				img = null;
@@ -42,13 +49,15 @@
 		this.modal = null;
 		this.isHTML = false;
 
-		this.initOptions = new Object(standardOptions);
+		this.global = {};
+
+		this.initOptions = new Object($.confirmDefault);
 
 		this.init = function(elem) {
 			var reload = arguments[1]||false;
 			selfObj = this;
 
-			if(reload || (selfObj.reload && selfObj.modal !== null)) {
+			if(selfObj.reload && selfObj.modal !== null && selfObj.modal.length) {
 				selfObj.modal.remove();
 				selfObj.template = null;
 			}
@@ -64,7 +73,23 @@
 			if(!selfObj.enabled)
 				return;
 
-			selfObj.createTemplate();
+			if(selfObj.url === null && !selfObj.lazyLoad) {
+				selfObj.createTemplate();
+				selfObj.addModal();
+			} else if(selfObj.lazyLoad) {
+				selfObj.loaded();
+			} else {
+				$.ajax($.extend(selfObj.ajaxOptions,{
+					url: selfObj.url,
+					success: function(content) {
+						selfObj.createTemplate(content);
+						selfObj.addModal();
+					}
+				}));
+			}
+		};
+
+		this.addModal = function() {
 			selfObj.modal = $(selfObj.template).appendTo('body');
 			selfObj.modal.unbind('click').click(function(e){
 				e.preventDefault();
@@ -110,10 +135,10 @@
 			});
 
 			this.loaded();
-		};
+		}
 
 		this.createTemplate = function() {
-			var extraContent = '';
+			var extraContent = arguments[0]||'';
 			if(!selfObj.template) {
 				selfObj.template = '<div class="ui-modal '+selfObj.modalClass+'" tabindex="1">';
 					selfObj.template += '<div tabindex="3" class="ui-modal-close"></div>';
@@ -124,8 +149,9 @@
 						selfObj.template += '</div>';
 							if(selfObj.input && typeof selfObj.createForm === 'function') {
 								extraContent += selfObj.createForm(selfObj);
-							} else if(selfObj.input)
+							} else if(selfObj.input) {
 								extraContent += '<input type="text" name="confirm_input">';
+							}
 
 							if(extraContent) {
 								selfObj.template += '<div class="ui-modal-content">';
@@ -154,8 +180,9 @@
 			selfObj.accept(selfObj);
 			if(!selfObj.keep_modal) {
 				selfObj.modal.removeClass('open');
-				if(selfObj.item.prop('tagName').toLowerCase() === 'html') {
+				if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
 					setTimeout(function() {
+						selfObj.template = '';
 						selfObj.modal.remove();
 					},500);
 				}
@@ -166,8 +193,9 @@
 			$('body').unbind('confirm.keyup');
 			selfObj.abort(selfObj);
 			selfObj.modal.removeClass('open');
-			if(selfObj.item.prop('tagName').toLowerCase() === 'html') {
+			if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
 				setTimeout(function() {
+					selfObj.template = '';
 					selfObj.modal.remove();
 				},500);
 			}
@@ -203,10 +231,35 @@
 			if(!selfObj.enabled)
 				return;
 
+			if(selfObj.lazyLoad && selfObj.url !== null) {
+				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
+					$.ajax($.extend(selfObj.ajaxOptions,{
+						url: selfObj.url,
+						success: function(content) {
+							selfObj.createTemplate(content);
+							selfObj.addModal();
+							$('.ui-modal').removeClass('open');
+							selfObj.inner_open();
+						}
+					}));
+				});
+			} else if(selfObj.lazyLoad && selfObj.url === null && !this.isHTML) {
+				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
+					selfObj.createTemplate();
+					selfObj.addModal();
+					$('.ui-modal').removeClass('open');
+					selfObj.inner_open();
+				});
+			} else {
+				selfObj.modalHandlers();
+			}
+		};
+
+		this.modalHandlers = function() {
 			if(!this.isHTML) {
 				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
 					e.preventDefault();
-					selfObj.defaultAction(e,this);
+					selfObj.defaultAction(e,this,selfObj);
 
 					$('.ui-modal').removeClass('open');
 					selfObj.inner_open();
@@ -216,6 +269,8 @@
 				selfObj.inner_open();
 			}
 		};
+
+
 	};
 
 	$[pluginName] = $.fn[pluginName] = function(settings) {
