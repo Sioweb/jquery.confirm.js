@@ -2,7 +2,7 @@
 
 This Plugin was made to replace the native confirm box for every browser 'cause they look crappy. Now this plugin is much more than a simple confirm box. Define content, add forms or load content lazy or eager with ajax. Add more buttons or customize the defaults. Everyone can has his own callback and content. Load the box for an element or simply with $.confirm(). You can style it like you need it.
 
-You also can use it as message to your visitor after an action like an ajax call. Or if you need a whole form in your box, simply combine it with my [FormCreator here on Github](https://github.com/Sioweb/jquery.createForm.js).
+You also can use it as message to your visitor after an action like an ajax call and autoclose the box after some time. Or if you need a whole form in your box, simply combine it with my [FormCreator here on Github](https://github.com/Sioweb/jquery.createForm.js).
 
 ## Options
 
@@ -11,6 +11,7 @@ You also can use it as message to your visitor after an action like an ajax call
 - content: 'Please press OK to confirm and run, or Abort to abort this action.',
 - button_accept: 'OK',
 - button_abort: 'Abort',
+- hideAfter: 1500,
 - custom_buttons: {},
 - on: 'click',
 - button_pressed: function(){},
@@ -34,17 +35,27 @@ You also can use it as message to your visitor after an action like an ajax call
 		<tr>
 			<td>title: ''</td>
 			<td>Modal-Headline</td>
-			<td>Wird als H2-Element im Modal ausgegeben.</td>
+			<td>H2 element in modal.</td>
 		</tr>
 		<tr>
 			<td>content: ''</td>
-			<td>Modal-Inhalt</td>
-			<td>Wird als Frage unter der Headline ausgegeben.</td>
+			<td>Modal content</td>
+			<td>Notice in the modal.</td>
 		</tr>
 		<tr>
 			<td>accept: function(){}</td>
-			<td>Accept-Event</td>
-			<td>Wird ausgeführt wenn der User auf den OK-Button klickt.</td>
+			<td>Accept event</td>
+			<td>Fired when clicking accept.</td>
+		</tr>
+		<tr>
+			<td>abort: function(){}</td>
+			<td>Abort event</td>
+			<td>Fired when clicking abort.</td>
+		</tr>
+		<tr>
+			<td>hideAfter: integer</td>
+			<td>Integer</td>
+			<td>Time in seconds after the modal will close automatically.</td>
 		</tr>
 	</tbody>
 </table>
