@@ -75,6 +75,7 @@ $('selector').on('EVENT',function() {
     // options here
   });
 });
+```
 
 ### Custom buttons
 
