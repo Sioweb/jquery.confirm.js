@@ -30,6 +30,9 @@
 
 		modalClass: 'modal',
 
+		hideAfter: null,
+		hideAfterTimeout: false,
+
 		keep_modal: false,
 		custom_buttons: null,
 		open: function(){},
@@ -38,6 +41,7 @@
 		defaultAction: function(){},
 		accept: function(){},
 		abort: function(){},
+		ajaxSuccess: function() {},
 		createForm: false
 	};
 
@@ -51,7 +55,7 @@
 
 		this.global = {};
 
-		this.initOptions = new Object($.confirmDefault);
+		this.initOptions = new Object($[pluginName+'Default']);
 
 		this.init = function(elem) {
 			var reload = arguments[1]||false;
@@ -84,6 +88,7 @@
 					success: function(content) {
 						selfObj.createTemplate(content);
 						selfObj.addModal();
+						selfObj.ajaxSuccess(selfObj,content);
 					}
 				}));
 			}
@@ -183,7 +188,7 @@
 				if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
 					setTimeout(function() {
 						selfObj.template = '';
-						selfObj.modal.remove();
+						selfObj.modal.remove(); 
 					},500);
 				}
 			}
@@ -202,6 +207,12 @@
 		}
 
 		this.inner_open = function() {
+			clearTimeout(selfObj.hideAfterTimeout);
+			if(selfObj.hideAfter !== null) {
+				selfObj.hideAfterTimeout = setTimeout(function() {
+					selfObj.inner_abort();
+				},selfObj.hideAfter);
+			}
 			$('body').on('confirm.keyup',function(e,keyupEvent) {
 				switch(parseInt(keyupEvent.which,10)) {
 					case selfObj.keys.ok:
@@ -227,6 +238,13 @@
 			selfObj.enabled = true;
 		};
 
+    this.update = function(data) {
+        if(data.title !== undefined)
+            selfObj.modal.find('.ui-modal-title').html(data.title);
+        if(data.content !== undefined)
+            selfObj.modal.find('.ui-modal-content').html(data.content);
+    };
+
 		this.loaded = function() {
 			if(!selfObj.enabled)
 				return;
@@ -240,6 +258,7 @@
 							selfObj.addModal();
 							$('.ui-modal').removeClass('open');
 							selfObj.inner_open();
+							selfObj.ajaxSuccess(selfObj,content);
 						}
 					}));
 				});
