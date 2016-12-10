@@ -2,6 +2,8 @@
 
 This Plugin was made to replace the native confirm box for every browser 'cause they look crappy. Now this plugin is much more than a simple confirm box. Define content, add forms or load content lazy or eager with ajax. Add more buttons or customize the defaults. Everyone can has his own callback and content. Load the box for an element or simply with $.confirm(). You can style it like you need it.
 
+You also can use it as message to your visitor after an action like an ajax call.
+
 ## Options
 
 - template: null,
@@ -62,6 +64,17 @@ $('.removeButton').confirm({
  }
 });
 ```
+
+### Without element
+
+The box will load every time the browser fires your event. The plugin will reload the content every time, so this should only be used if you don't need to load tonns of content. For example use it to tell your visitor that the action was successfull after after some ajax.
+
+```
+$('selector').on('EVENT',function() {
+  $.confirm({
+    // options here
+  });
+});
 
 ### Custom buttons
 
