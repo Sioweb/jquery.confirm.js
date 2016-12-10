@@ -1,36 +1,6 @@
-# jquery.confirm.js
+# Confirm JS
 
-This little script adds a modal to body. You need to style (Hide, Transform, Translate, ..) it.
- 
-## Example
-
-```
-$('.removeButton').confirm({
- on: 'click',
- accept: function(obj) {
-  alert('Aktion akzeptiert!');
- },
- abort: function() {
-  alert('Aktion abgebrochen!');
- }
-});
-```
-
-## Custom buttons
-
-```
-$('.removeButton').confirm({
-  custom_buttons: {
-    do_something_cool: {
-      title: 'Click here',
-      link: 'link/to/path',
-      target: '_blank',
-      keep_modal: 1,
-      callback: function(element, buttonSettings, confirmObject) {}
-    }
-  }
-});
-```
+This Plugin was made to replace the native confirm box for every browser 'cause they look crappy. Now this plugin is much more than a simple confirm box. Define content, add forms or load content lazy or eager with ajax. Add more buttons or customize the defaults. Everyone can has his own callback and content. Load the box for an element or simply with $.confirm(). You can style it like you need it.
 
 ## Options
 
@@ -76,3 +46,57 @@ $('.removeButton').confirm({
 		</tr>
 	</tbody>
 </table>
+ 
+## Examples
+
+### Default use
+
+```
+$('.removeButton').confirm({
+ on: 'click',
+ accept: function(obj) {
+  alert('Aktion akzeptiert!');
+ },
+ abort: function() {
+  alert('Aktion abgebrochen!');
+ }
+});
+```
+
+### Custom buttons
+
+```
+$('.removeButton').confirm({
+  custom_buttons: {
+    do_something_cool: {
+      title: 'Click here',
+      link: 'link/to/path',
+      target: '_blank',
+      keep_modal: 1,
+      callback: function(element, buttonSettings, confirmObject) {
+      	// do something cool on click
+      }
+    }
+  }
+});
+```
+
+### Ajax
+
+Its recommended to load content eager if you wont define the plugin to an element. The content will be loaded to the box.
+
+```
+$.confirm({
+  url: 'your_code.php',
+  ajaxOptions: {
+    method: 'POST',
+    data: {
+      foo: 'bar',
+      x: 2
+    }
+  },
+  ajaxSuccess: function(confirmObj,content) {
+    // do something
+  }
+});
+``` 
