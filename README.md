@@ -6,24 +6,35 @@ You also can use it as message to your visitor after an action like an ajax call
 
 ## Options
 
-- template: null,
-- title: 'Are you sure?',
-- content: 'Please press OK to confirm and run, or Abort to abort this action.',
-- button_accept: 'OK',
-- button_abort: 'Abort',
-- hideAfter: 1500,
-- custom_buttons: {},
-- on: 'click',
-- button_pressed: function(){},
-- close: function(){},
-- defaultAction: function(){},
-- accept: function(){},
-- abort: function(){},
+- template: null
+- title: 'Are you sure?'
+- content: 'Please press OK to confirm and run, or Abort to abort this action.'
+- button_accept: 'OK'
+- button_abort: 'Abort'
+- on: 'click'
+- input: true|function
+- url: string
+- ajaxOption: object
+- lazyLoad: false
+- removeOnClose: false
+- modalClass: 'modal'
+- hideAfter: null
+- keep_modal: true
+- custom_buttons: {}
+- open: function(){}
+- button_pressed: function(){}
+- close: function(){}
+- defaultAction: function(){}
+- accept: function(){}
+- abort: function(){}
+- ajaxSuccess: function() {}
+- createForm: string
+
 
 <table width="100%">
 	<thead>
 		<tr>
-			<th>Option</th><th>Werte</th><th>Beschreibung</th>
+			<th>Option</th><th>Values</th><th>Description</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,7 +46,32 @@ You also can use it as message to your visitor after an action like an ajax call
 		<tr>
 			<td>title: ''</td>
 			<td>Modal-Headline</td>
-			<td>H2 element in modal.</td>
+			<td>H2 element in modal</td>
+		</tr>
+		<tr>
+			<td>button_accept: 'OK'</td>
+			<td>String|false</td>
+			<td>If value is false, button will be hidden</td>
+		</tr>
+		<tr>
+			<td>button_abort: 'Abort'</td>
+			<td>String|false</td>
+			<td>If value is false, button will be hidden</td>
+		</tr>
+		<tr>
+			<td>on: 'click'</td>
+			<td>Event-String</td>
+			<td>Modal will open when given event is fired</td>
+		</tr>
+		<tr>
+			<td>input: false</td>
+			<td>Boolean|function</td>
+			<td>If true, a simple textfield is shown. Can be a function with a string as return value</td>
+		</tr>
+		<tr>
+			<td>hideAfter: null</td>
+			<td>integer</td>
+			<td>If integer is given, modal will close after X milliseconds</td>
 		</tr>
 		<tr>
 			<td>content: ''</td>
@@ -45,17 +81,32 @@ You also can use it as message to your visitor after an action like an ajax call
 		<tr>
 			<td>accept: function(){}</td>
 			<td>Accept event</td>
-			<td>Fired when clicking accept.</td>
+			<td>Fired when clicking accept</td>
 		</tr>
 		<tr>
 			<td>abort: function(){}</td>
 			<td>Abort event</td>
-			<td>Fired when clicking abort.</td>
+			<td>Fired when clicking abort</td>
 		</tr>
 		<tr>
 			<td>hideAfter: integer</td>
 			<td>Integer</td>
-			<td>Time in seconds after the modal will close automatically.</td>
+			<td>Time in seconds after the modal will close automatically</td>
+		</tr>
+		<tr>
+			<td>url: null</td>
+			<td>URL-String</td>
+			<td>Modal will load content via ajax from this url</td>
+		</tr>
+		<tr>
+			<td>ajaxOption: Object</td>
+			<td>{method: 'POST'}</td>
+			<td>Default ajax options which jquery ajax require</td>
+		</tr>
+		<tr>
+			<td>ajaxSuccess: function(){}</td>
+			<td>Ajax success event</td>
+			<td>Fired when ajax is successfully done</td>
 		</tr>
 	</tbody>
 </table>
