@@ -1,5 +1,5 @@
 {
-  "name": "sioweb.confirm",
+  "name": "sioweb/confirm",
   "version": "2.1.0",
   "description": "Nice customizable confirm overlay",
   "author": "Sascha Weidner <support@sioweb.de>",
