@@ -1,0 +1,13 @@
+{
+  "name": "confirm",
+  "version": "2.1.0",
+  "authors": [
+    "Sascha Weidner <support@sioweb.de>"
+  ],
+  "description": "Nice customizable confirm overlay",
+  "main": "jquery.confirm.js",
+  "keywords": [
+    "jquery","confirm","javascript"
+  ],
+  "license": "MIT",
+}
