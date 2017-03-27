@@ -1,0 +1,18 @@
+{
+  "name": "sioweb.confirm",
+  "version": "2.1.0",
+  "description": "Nice customizable confirm overlay",
+  "author": "Sascha Weidner <support@sioweb.de>",
+  "main": "jquery.confirm.js",
+  "repository": {
+	  "type": "git",
+	  "url": "https://github.com/Sioweb/jquery.confirm.js"
+	},
+  "bugs": {
+	  "url": "https://github.com/Sioweb/jquery.confirm.js/issues"
+	},
+  "keywords": [
+	  "jquery","confirm","javascript"
+	],
+  "license": "MIT"
+}
