@@ -13,11 +13,16 @@
     "modal"
   ],
   "license": "MIT",
-  "dependencies": {
-    "jquery": "~2.0.3",
-  },
   "ignore": [
     "package.json",
     "composer.json"
   ],
+  "dependencies": {
+    "jquery": "2.*"
+  },
+  "devDependencies": {
+    "grunt-cli": "1.2.0",
+    "grunt-contrib-uglify": "1.0.1",
+    "grunt-contrib-cssmin": "2.0.0"
+  }
 }
