@@ -45,9 +45,10 @@
 
  .ui-modal.sw_drag_over {
   background-color: #eee;
-  .ui-modal-abort {
-    opacity: 0;
-  }
+}
+
+ .ui-modal.sw_drag_over .ui-modal-abort{
+  opacity: 0;
 }
 
 .ui-modal-abort {

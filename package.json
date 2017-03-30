@@ -2,12 +2,14 @@
   "name": "sioweb-confirm",
   "version": "2.1.0",
   "description": "Nice customizable jquery-based confirm overlay without bootstrap",
-  "main": "jquery.confirm.js",
+  "main": "src/jquery.confirm.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm install && grunt",
+    "start": "grunt watch",
+    "test": "grunt && grunt test:slow"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,13 @@
   "bugs": {
     "url": "https://github.com/Sioweb/jquery.confirm.js/issues"
   },
-  "homepage": "https://github.com/Sioweb/jquery.confirm.js#readme"
+  "homepage": "https://github.com/Sioweb/jquery.confirm.js#readme",
+  "dependencies": {
+    "jquery": "2.*"
+  },
+  "devDependencies": {
+    "grunt-cli": "1.2.0",
+    "grunt-contrib-uglify": "1.0.1",
+    "grunt-contrib-cssmin": "2.0.0"
+  }
 }
