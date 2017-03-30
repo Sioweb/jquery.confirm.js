@@ -14,8 +14,7 @@
   ],
   "license": "MIT",
   "ignore": [
-    "package.json",
-    "composer.json"
+    "package.json"
   ],
   "dependencies": {
     "jquery": "2.*"
