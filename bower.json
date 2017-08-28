@@ -3,14 +3,13 @@
   "version": "2.1.0",
   "main": "dist/jquery.confirm.min.js",
   "homepage": "https://github.com/Sioweb/jquery.confirm.js",
-  "authors": [
-    "Sascha Weidner <support@sioweb.de>"
-  ],
+  "authors": ["Sascha Weidner <support@sioweb.de>"],
   "description": "A simple jquery based confirm modal without bootstrap",
   "keywords": [
     "confirm",
     "jquery",
-    "modal"
+    "modal",
+    "javascript"
   ],
   "license": "MIT",
   "ignore": [
@@ -20,8 +19,12 @@
     "jquery": "*"
   },
   "devDependencies": {
+    "grunt": "^1.0.1",
     "grunt-cli": "1.2.0",
-    "grunt-contrib-uglify": "1.0.1",
-    "grunt-contrib-cssmin": "2.0.0"
+    "grunt-contrib-cssmin": "2.0.0",
+    "grunt-contrib-uglify": "1.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/Sioweb/jquery.confirm.js/issues"
   }
 }
