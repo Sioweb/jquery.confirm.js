@@ -19,14 +19,14 @@
 		input: false,
 		keys: {
 			// ok: 13,
-			abort: 27
+			// abort: 27
 		},
-    url: null,
-    ajaxOptions: {
-    	method: 'POST'
-    },
-    lazyLoad: false,
-    removeOnClose: false,
+		url: null,
+		ajaxOptions: {
+			method: 'POST'
+		},
+		lazyLoad: false,
+		removeOnClose: false,
 
 		modalClass: 'modal',
 
@@ -48,7 +48,8 @@
 	var PluginClass = function() {
 
 		var selfObj = this,
-				img = null;
+			img = null;
+
 		this.item = false;
 		this.modal = null;
 		this.isHTML = false;
@@ -66,16 +67,14 @@
 				selfObj.template = null;
 			}
 
-			if(!this.container)
+			if(!this.container) {
 				this.container = window;
+			}
 			this.container = $(this.container);
 
 			this.elem = elem;
 			this.item = $(this.elem);
 			this.isHTML = selfObj.item[0].tagName.toLowerCase() === 'html';
-
-			if(!selfObj.enabled)
-				return;
 
 			if(selfObj.url === null && !selfObj.lazyLoad) {
 				selfObj.createTemplate();
@@ -86,6 +85,7 @@
 				$.ajax($.extend(selfObj.ajaxOptions,{
 					url: selfObj.url,
 					success: function(content) {
+						selfObj.modalHandlers();
 						selfObj.createTemplate(content);
 						selfObj.addModal();
 						selfObj.ajaxSuccess(selfObj,content);
@@ -105,7 +105,28 @@
 
 			selfObj.modal.find('a').unbind('click').click(function(e){
 				var $el = $(this),
-						customData = $el.data('custom');
+					customData = $el.data('custom');
+				
+				e.stopPropagation();
+
+				if(
+					selfObj.custom_buttons !== undefined &&
+					customData !== undefined &&
+					selfObj.custom_buttons[customData] !== undefined
+				) {
+					if(typeof selfObj.custom_buttons[customData].callback === 'function') {
+						selfObj.custom_buttons[customData].callback($el,selfObj.custom_buttons[customData],selfObj);
+					}
+					if(selfObj.custom_buttons[customData].keep_modal === undefined) {
+						selfObj.modal.removeClass('open');
+					}
+				}
+			});
+
+			selfObj.modal.find('.ui-modal-button-custom').unbind('click').click(function(e){
+				var $el = $(this),
+					customData = $el.data('custom');
+					
 				e.stopPropagation();
 
 				if(
@@ -139,6 +160,9 @@
 				selfObj.inner_abort();
 			});
 
+			selfObj.modal.children().bind('mousemove mousedown mouseup keydown keyup',function(e) {
+				e.stopPropagation();
+			});
 			this.loaded();
 		}
 
@@ -152,7 +176,7 @@
 							selfObj.template += '<h2>'+selfObj.title+'</h2>';
 							selfObj.template += '<p>'+selfObj.content+'</p>';
 						selfObj.template += '</div>';
-							if(selfObj.input && typeof selfObj.createForm === 'function') {
+							if(typeof selfObj.createForm === 'function') {
 								extraContent += selfObj.createForm(selfObj);
 							} else if(selfObj.input) {
 								extraContent += '<input type="text" name="confirm_input">';
@@ -165,16 +189,25 @@
 							}
 
 							selfObj.template += '<div class="ui-modal-buttons">'
-								if(selfObj.button_accept) selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>'
-								if(selfObj.button_abort) selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>'
-								if(selfObj.custom_buttons)
+								if(selfObj.button_accept) {
+									selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>';
+								}
+								if(selfObj.button_abort) {
+									selfObj.template += '<div class="ui-modal-button ui-modal-abort">'+selfObj.button_abort+'</div>';
+								}
+								if(selfObj.custom_buttons) {
 									for(var button in selfObj.custom_buttons) {
-										selfObj.template += '<div class="ui-modal-button-custom ui-modal-custom-'+button+'">';
-											if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '<a data-custom="'+button+'" href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
+										selfObj.template += '<div class="ui-modal-button-custom ui-modal-custom-'+button+'" data-custom="'+button+'">';
+											if(selfObj.custom_buttons[button].link !== undefined) {
+												selfObj.template += '<a data-custom="'+button+'" href="'+selfObj.custom_buttons[button].link+'"'+(selfObj.custom_buttons[button].target?' target="'+selfObj.custom_buttons[button].target+'"':'')+'>';
+											}
 											selfObj.template += selfObj.custom_buttons[button].title;
-											if(selfObj.custom_buttons[button].link !== undefined) selfObj.template += '</a>';
+											if(selfObj.custom_buttons[button].link !== undefined) {
+												selfObj.template += '</a>';
+											}
 										selfObj.template += '</div>'
 									}
+								}
 						selfObj.template += '</div>';
 					selfObj.template += '</div>';
 				selfObj.template += '</div>';
@@ -225,8 +258,11 @@
 			}).keyup(function(e){
 				$(this).trigger('confirm.keyup',e);
 			});
-			selfObj.open(selfObj);
-			selfObj.modal.addClass('open');
+
+			setTimeout(function() {  
+				selfObj.open(selfObj);
+				selfObj.modal.addClass('open');
+			},100);
 		}
 
 		this.disable = function() {
@@ -238,17 +274,16 @@
 			selfObj.enabled = true;
 		};
 
-    this.update = function(data) {
-        if(data.title !== undefined)
-            selfObj.modal.find('.ui-modal-title').html(data.title);
-        if(data.content !== undefined)
-            selfObj.modal.find('.ui-modal-content').html(data.content);
-    };
+		this.update = function(data) {
+			if(data.title !== undefined) {
+				selfObj.modal.find('.ui-modal-title').html(data.title);
+			}
+			if(data.content !== undefined) {
+				selfObj.modal.find('.ui-modal-content').html(data.content);
+			}
+		};
 
 		this.loaded = function() {
-			if(!selfObj.enabled)
-				return;
-
 			if(selfObj.lazyLoad && selfObj.url !== null) {
 				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
 					$.ajax($.extend(selfObj.ajaxOptions,{
@@ -263,7 +298,10 @@
 					}));
 				});
 			} else if(selfObj.lazyLoad && selfObj.url === null && !this.isHTML) {
-				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
+				selfObj.item.unbind(selfObj.on).on(selfObj.on,function(e){
+					e.preventDefault();
+					e.stopPropagation();
+
 					selfObj.createTemplate();
 					selfObj.addModal();
 					$('.ui-modal').removeClass('open');
@@ -276,26 +314,27 @@
 
 		this.modalHandlers = function() {
 			if(!this.isHTML) {
-				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
+				selfObj.item.unbind(selfObj.on).on(selfObj.on,function(e){
 					e.preventDefault();
-					selfObj.defaultAction(e,this,selfObj);
+					e.stopPropagation();
+					if(selfObj.modal !== null) {
+						selfObj.defaultAction(e,this,selfObj);
 
-					$('.ui-modal').removeClass('open');
-					selfObj.inner_open();
+						$('.ui-modal').removeClass('open');
+						selfObj.inner_open();
+					}
 				});
 			} else {
 				$('.ui-modal').removeClass('open');
 				selfObj.inner_open();
 			}
 		};
-
-
 	};
 
 	$[pluginName] = $.fn[pluginName] = function(settings) {
 		var element = typeof this === 'function'?$('html'):this,
-				newData = arguments[1]||{},
-				returnElement = [];
+			newData = arguments[1]||{},
+			returnElement = [];
 
 		returnElement[0] = element.each(function(k,i) {
 			var pluginClass = $.data(this, pluginName);
@@ -303,8 +342,9 @@
 			if(!settings || typeof settings === 'object' || settings === 'init') {
 
 				if(!pluginClass) {
-					if(settings === 'init')
+					if(settings === 'init') {
 						settings = arguments[1] || {};
+					}
 					pluginClass = new PluginClass();
 
 					var newOptions = new Object(pluginClass.initOptions);
@@ -315,12 +355,14 @@
 
 					/** Initialisieren. */
 					pluginClass.init(this);
-					if(element.prop('tagName').toLowerCase() !== 'html')
+					if(element.prop('tagName').toLowerCase() !== 'html') {
 						$.data(this, pluginName, pluginClass);
+					}
 				} else {
 					pluginClass.init(this,1);
-					if(element.prop('tagName').toLowerCase() !== 'html')
+					if(element.prop('tagName').toLowerCase() !== 'html') {
 						$.data(this, pluginName, pluginClass);
+					}
 				}
 			} else if(!pluginClass) {
 				return;
@@ -332,7 +374,10 @@
 			}
 		});
 
-		if(returnElement[1] !== undefined) return returnElement[1];
+		if(returnElement[1] !== undefined) {
+			return returnElement[1];
+		}
+		
 		return returnElement[0];
 	};
 })(jQuery);
