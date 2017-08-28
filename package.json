@@ -1,5 +1,6 @@
 {
   "name": "sioweb-confirm",
+  "version": "2.2.0",
   "main": "dist/jquery.confirm.min.js",
   "homepage": "https://github.com/Sioweb/jquery.confirm.js#readme",
   "author": "Sascha Weidner <support@sioweb.de>",
