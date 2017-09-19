@@ -17,9 +17,11 @@
 		button_abort: 'Abbrechen',
 		on: 'click',
 		input: false,
+		addHeader: true,
+		addButtons: true,
 		keys: {
 			// ok: 13,
-			// abort: 27
+			abort: 27
 		},
 		url: null,
 		ajaxOptions: {
@@ -106,7 +108,7 @@
 			selfObj.modal.find('a').unbind('click').click(function(e){
 				var $el = $(this),
 					customData = $el.data('custom');
-				
+
 				e.stopPropagation();
 
 				if(
@@ -163,6 +165,7 @@
 			selfObj.modal.children().bind('mousemove mousedown mouseup keydown keyup',function(e) {
 				e.stopPropagation();
 			});
+
 			this.loaded();
 		}
 
@@ -172,22 +175,26 @@
 				selfObj.template = '<div class="ui-modal '+selfObj.modalClass+'" tabindex="1">';
 					selfObj.template += '<div tabindex="3" class="ui-modal-close"></div>';
 					selfObj.template += '<div class="ui-modal-inner inner">';
-						selfObj.template += '<div class="ui-modal-header">';
-							selfObj.template += '<h2>'+selfObj.title+'</h2>';
-							selfObj.template += '<p>'+selfObj.content+'</p>';
-						selfObj.template += '</div>';
-							if(typeof selfObj.createForm === 'function') {
-								extraContent += selfObj.createForm(selfObj);
-							} else if(selfObj.input) {
-								extraContent += '<input type="text" name="confirm_input">';
-							}
+						if(selfObj.addHeader) {
+							selfObj.template += '<div class="ui-modal-header">';
+								selfObj.template += '<h2>'+selfObj.title+'</h2>';
+								selfObj.template += '<p>'+selfObj.content+'</p>';
+							selfObj.template += '</div>';
+						}
+						
+						if(typeof selfObj.createForm === 'function') {
+							extraContent += selfObj.createForm(selfObj);
+						} else if(selfObj.input) {
+							extraContent += '<input type="text" name="confirm_input">';
+						}
 
-							if(extraContent) {
-								selfObj.template += '<div class="ui-modal-content">';
-									selfObj.template += extraContent;
-								selfObj.template += '</div>';
-							}
+						if(extraContent) {
+							selfObj.template += '<div class="ui-modal-content">';
+								selfObj.template += extraContent;
+							selfObj.template += '</div>';
+						}
 
+						if(selfObj.addButtons) {
 							selfObj.template += '<div class="ui-modal-buttons">'
 								if(selfObj.button_accept) {
 									selfObj.template += '<div class="ui-modal-button ui-modal-ok">'+selfObj.button_accept+'</div>';
@@ -208,7 +215,8 @@
 										selfObj.template += '</div>'
 									}
 								}
-						selfObj.template += '</div>';
+							selfObj.template += '</div>';
+						}
 					selfObj.template += '</div>';
 				selfObj.template += '</div>';
 			}
@@ -221,7 +229,7 @@
 				if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
 					setTimeout(function() {
 						selfObj.template = '';
-						selfObj.modal.remove(); 
+						selfObj.modal.remove();
 					},500);
 				}
 			}
@@ -231,11 +239,13 @@
 			$('body').unbind('confirm.keyup');
 			selfObj.abort(selfObj);
 			selfObj.modal.removeClass('open');
-			if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
-				setTimeout(function() {
-					selfObj.template = '';
-					selfObj.modal.remove();
-				},500);
+			if(!selfObj.keep_modal) {
+				if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
+					setTimeout(function() {
+						selfObj.template = '';
+						selfObj.modal.remove();
+					},500);
+				}
 			}
 		}
 
@@ -286,19 +296,27 @@
 		this.loaded = function() {
 			if(selfObj.lazyLoad && selfObj.url !== null) {
 				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
-					$.ajax($.extend(selfObj.ajaxOptions,{
-						url: selfObj.url,
-						success: function(content) {
-							selfObj.createTemplate(content);
-							selfObj.addModal();
-							$('.ui-modal').removeClass('open');
-							selfObj.inner_open();
-							selfObj.ajaxSuccess(selfObj,content);
-						}
-					}));
+					e.preventDefault();
+					e.stopPropagation();
+
+					if(!selfObj.modal) {
+						$.ajax($.extend(selfObj.ajaxOptions,{
+							url: selfObj.url,
+							success: function(content) {
+								selfObj.createTemplate(content);
+								selfObj.addModal();
+								$('.ui-modal').removeClass('open');
+								selfObj.inner_open();
+								selfObj.ajaxSuccess(selfObj,content);
+							}
+						}));
+					} else {
+						$('.ui-modal').removeClass('open');
+						selfObj.inner_open();
+					}
 				});
 			} else if(selfObj.lazyLoad && selfObj.url === null && !this.isHTML) {
-				selfObj.item.unbind(selfObj.on).on(selfObj.on,function(e){
+				selfObj.item.unbind(selfObj.on).bind(selfObj.on,function(e){
 					e.preventDefault();
 					e.stopPropagation();
 
