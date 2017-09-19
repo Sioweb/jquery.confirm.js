@@ -207,7 +207,7 @@
 						if(selfObj.preventReopening) {
 							if(typeof selfObj.preventReopening === 'string') {
 								extraContent += '<div class="ui-confirm-prevent-reopening">';
-									extraContent += '<input id="ui-confirm-prevent-reopening-'+selfObj.modalID+'" type="checkbox" checked="checked">';
+									extraContent += '<input id="ui-confirm-prevent-reopening-'+selfObj.modalID+'" type="checkbox">';
 									extraContent += '<label for="ui-confirm-prevent-reopening-'+selfObj.modalID+'">'+selfObj.preventReopening+'</label>';
 								extraContent += '</div>';
 							} else if(typeof selfObj.preventReopening === 'function') {
@@ -267,7 +267,9 @@
 		};
 
 		this.inner_accept = function() {
+			selfObj.handleReopening();
 			selfObj.accept(selfObj);
+			selfObj.prevent(selfObj);
 			if(!selfObj.keep_modal) {
 				selfObj.modal.removeClass('open');
 				if(selfObj.item.prop('tagName').toLowerCase() === 'html' || selfObj.removeOnClose) {
