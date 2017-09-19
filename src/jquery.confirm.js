@@ -32,6 +32,8 @@
 
 		modalClass: 'modal',
 
+		stopPropagations: false,
+
 		hideAfter: null,
 		hideAfterTimeout: false,
 
@@ -43,8 +45,11 @@
 		defaultAction: function(){},
 		accept: function(){},
 		abort: function(){},
+		prevent: function(){},
 		ajaxSuccess: function() {},
-		createForm: false
+		createForm: false,
+		preventReopening: false,
+		modalID: null
 	};
 
 	var PluginClass = function() {
@@ -64,6 +69,10 @@
 			var reload = arguments[1]||false;
 			selfObj = this;
 
+			if(!this.modalID) {
+				this.modalID = Math.round(Math.random()/1000);
+			}
+
 			if(selfObj.reload && selfObj.modal !== null && selfObj.modal.length) {
 				selfObj.modal.remove();
 				selfObj.template = null;
@@ -77,6 +86,11 @@
 			this.elem = elem;
 			this.item = $(this.elem);
 			this.isHTML = selfObj.item[0].tagName.toLowerCase() === 'html';
+
+			if(selfObj.preventReopening && selfObj.checkPreventKey()) {
+				selfObj.prevent(selfObj);
+				return;
+			}
 
 			if(selfObj.url === null && !selfObj.lazyLoad) {
 				selfObj.createTemplate();
@@ -162,9 +176,11 @@
 				selfObj.inner_abort();
 			});
 
-			selfObj.modal.children().bind('mousemove mousedown mouseup keydown keyup',function(e) {
-				e.stopPropagation();
-			});
+			if(selfObj.stopPropagations) {
+				selfObj.modal.children().bind('mousemove mousedown mouseup keydown keyup',function(e) {
+					e.stopPropagation();
+				});
+			}
 
 			this.loaded();
 		}
@@ -186,6 +202,19 @@
 							extraContent += selfObj.createForm(selfObj);
 						} else if(selfObj.input) {
 							extraContent += '<input type="text" name="confirm_input">';
+						}
+
+						if(selfObj.preventReopening) {
+							if(typeof selfObj.preventReopening === 'string') {
+								extraContent += '<div class="ui-confirm-prevent-reopening">';
+									extraContent += '<input id="ui-confirm-prevent-reopening-'+selfObj.modalID+'" type="checkbox" checked="checked">';
+									extraContent += '<label for="ui-confirm-prevent-reopening-'+selfObj.modalID+'">'+selfObj.preventReopening+'</label>';
+								extraContent += '</div>';
+							} else if(typeof selfObj.preventReopening === 'function') {
+								var extraCallback = selfObj.preventReopening(selfObj);
+								if(extraCallback !== undefined)
+									extraContent += extraCallback;
+							}
 						}
 
 						if(extraContent) {
@@ -220,6 +249,21 @@
 					selfObj.template += '</div>';
 				selfObj.template += '</div>';
 			}
+		};
+
+		this.handleReopening = function() {
+			if(selfObj.preventReopening) {
+				localStorage.setItem(selfObj.getPerventKey(), selfObj.modal.find('#ui-confirm-prevent-reopening-'+selfObj.modalID).is(':checked'));
+			}
+		};
+
+		this.getPerventKey = function() {
+			return 'ui-modal-prevent-reopening'+(selfObj.reopeningKey?'-'+selfObj.reopeningKey:'');
+		};
+
+		this.checkPreventKey = function() {
+			var key = localStorage.getItem(selfObj.getPerventKey());
+			return (key !== null && (key == 'true' || key == 1 || key == true));
 		};
 
 		this.inner_accept = function() {
