@@ -276,6 +276,7 @@
 					setTimeout(function() {
 						selfObj.template = '';
 						selfObj.modal.remove();
+						selfObj.modal = null;
 					},500);
 				}
 			}
@@ -290,6 +291,7 @@
 					setTimeout(function() {
 						selfObj.template = '';
 						selfObj.modal.remove();
+						selfObj.modal = null;
 					},500);
 				}
 			}
