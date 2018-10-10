@@ -1,6 +1,6 @@
 {
   "name": "sioweb-confirm",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "Nice customizable jquery-based confirm overlay",
   "main": "./src/confirm.js",
   "scripts": {
@@ -15,6 +15,9 @@
     "confirm",
     "modal"
   ],
+  "dependencies": {
+    "jquery": "*"
+  },
   "author": "Sascha Weidner",
   "license": "ISC",
   "bugs": {

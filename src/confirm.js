@@ -1,9 +1,10 @@
+import $ from "jquery";
+
 (function (factory) {
-	console.log(module);
 	if(typeof module === "object" && typeof module.exports === "object") {
-		module.exports = factory(require("jquery"), window, document);
+		module.exports = factory($, window, document);
 	} else {
-	  factory(jQuery, window, document);
+	  factory($, window, document);
 	}
   }(function($, window, document, undefined) {
 
