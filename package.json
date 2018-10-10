@@ -1,0 +1,24 @@
+{
+  "name": "sioweb-confirm",
+  "version": "3.0.0",
+  "description": "Nice customizable jquery-based confirm overlay",
+  "main": "./src/confirm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sioweb/jquery.confirm.js.git"
+  },
+  "keywords": [
+    "jquery",
+    "confirm",
+    "modal"
+  ],
+  "author": "Sascha Weidner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sioweb/jquery.confirm.js/issues"
+  },
+  "homepage": "https://github.com/Sioweb/jquery.confirm.js#readme"
+}
