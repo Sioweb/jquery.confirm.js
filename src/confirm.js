@@ -1,4 +1,8 @@
-import $ from "jquery";
+import {$ as $jq} from "jquery";
+
+if($ === undefined) {
+	$ = $jq;
+}
 
 (function (factory) {
 	if(typeof module === "object" && typeof module.exports === "object") {
