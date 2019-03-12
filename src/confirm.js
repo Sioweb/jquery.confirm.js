@@ -1,4 +1,4 @@
-/*@preserve Sioweb jquery.confirm.js for webpack */
+/*!@preserve Sioweb jquery.confirm.js for webpack */
 import { $ as $jq } from "jquery";
 
 if ($ === undefined) {
