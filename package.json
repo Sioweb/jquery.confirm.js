@@ -1,6 +1,6 @@
 {
   "name": "sioweb-confirm",
-  "version": "3.0.2",
+  "version": "3.0.5",
   "description": "Nice customizable jquery-based confirm overlay",
   "main": "./src/confirm.js",
   "scripts": {
