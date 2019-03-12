@@ -1,10 +1,11 @@
 {
   "name": "sioweb-confirm",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Nice customizable jquery-based confirm overlay",
   "main": "./src/confirm.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node -e \"console.log('Sioweb Confirm installed\\n')\""
   },
   "repository": {
     "type": "git",
